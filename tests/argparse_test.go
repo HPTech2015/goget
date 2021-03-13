@@ -3,6 +3,7 @@ package tests
 import (
 	"testing"
 	"goget/core"
+	"os"
 )
 
 func TestParseArgChar(t *testing.T) {
@@ -36,7 +37,14 @@ func TestArgInvoke(t *testing.T) {
 	argParser := core.ArgParser{}
 
 	// Test for good.
+	pwd, _ := os.Getwd()
+
 	argParser.ArgInvoke(1, "--input-file=http://fakedomain/fakepath", &settings)
+	assert.AssertString(settings.LocalTarget, pwd + "/fakepath", t)
+
+	argParser.ArgInvoke(1, "--output-file=./", &settings)
+	assert.AssertString(settings.LocalTarget, pwd + "/fakepath", t)
+
 	argParser.ArgInvoke(1, "--output-file=/fakepath", &settings)
 
 	assert.AssertString(settings.RemoteTarget, "http://fakedomain/fakepath", t)

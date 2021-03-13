@@ -86,10 +86,17 @@ func (argParser *ArgParser) ArgInvoke(i int, arg string, settings *Settings) err
 
 	if matched, _ := regexp.MatchString("^--input-file", arg); matched {
 		argVal, _ := argParser.ExtractArgVal(i, "--input-file", arg)
+		if settings.LocalTarget == "" || settings.LocalTarget == "./" {
+			remotePath := strings.Split(argVal, "/")
+			pwd, _ := os.Getwd()
+			settings.SetLocalTarget(pwd + "/" + remotePath[len(remotePath) - 1])
+		}
 		settings.SetRemoteTarget(argVal)
 	} else if matched, _ := regexp.MatchString("^--output-file", arg); matched {
 		argVal, _ := argParser.ExtractArgVal(i, "--output-file", arg)
-		settings.SetLocalTarget(argVal)
+		if argVal != "./" {
+			settings.SetLocalTarget(argVal)
+		}
 	} else if matched, _ := regexp.MatchString("^--version$", arg); matched {
 		v, err := settings.GetVersion()
 		localError = err

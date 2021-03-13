@@ -15,16 +15,6 @@ func main() {
 		fmt.Println(err)
 	}
 
-	// Print Settings
-	remoteTarget, err := settings.GetRemoteTarget()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Remote Target:", remoteTarget)
-
-	localTarget, err := settings.GetLocalTarget()
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Local Target:", localTarget)
+	getFile := core.GetFile{}
+	getFile.Pull(settings.LocalTarget, settings.RemoteTarget)
 }

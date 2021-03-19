@@ -70,3 +70,27 @@ func (assert *Assert) AssertSliceLen(strs []string, l int, t *testing.T) bool {
 
 	return true
 }
+
+/*
+	Test if boolean is true.
+*/
+func (assert *Assert) AssertTrue(testBool bool, t *testing.T) bool {
+	if !testBool {
+		t.Error("Expected true, but got false.")
+		return testBool
+	}
+
+	return testBool
+}
+
+/*
+	Test if boolean is false.
+*/
+func (assert *Assert) AssertFalse(testBool bool, t *testing.T) bool {
+	if testBool {
+		t.Error("Expected false, but got true.")
+		return !testBool
+	}
+
+	return !testBool
+}

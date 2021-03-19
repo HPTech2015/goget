@@ -44,6 +44,7 @@ func (getFile *GetFile) PullAndCheck(filePath, url string) (bool, error) {
 		return false, err
 	}
 	getFile.RemoteChecksum = strings.Replace(string(remoteChecksum), "\n", "", -1)
+	os.Remove(checksumPath)
 
 	return getFile.LocalChecksum == getFile.RemoteChecksum, nil
 }

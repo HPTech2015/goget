@@ -2,6 +2,7 @@ package tests
 
 import (
 	"testing"
+	"os"
 )
 
 /*
@@ -93,4 +94,30 @@ func (assert *Assert) AssertFalse(testBool bool, t *testing.T) bool {
 	}
 
 	return !testBool
+}
+
+/*
+	Test if file is exists.
+*/
+func (assert *Assert) AssertFileExists(filePath string, t *testing.T) bool {
+	_, err := os.Stat(filePath)
+	if os.IsNotExist(err) {
+		t.Errorf("The %v file does not exist.", filePath)
+		return false
+	}
+
+	return true
+}
+
+/*
+	Test if file is exists.
+*/
+func (assert *Assert) AssertNotFileExists(filePath string, t *testing.T) bool {
+	_, err := os.Stat(filePath)
+	if !os.IsNotExist(err) {
+		t.Errorf("The %v file exists.", filePath)
+		return false
+	}
+
+	return true
 }

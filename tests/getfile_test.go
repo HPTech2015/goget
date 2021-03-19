@@ -44,9 +44,10 @@ func TestPullAndCheck(t *testing.T) {
 	}
 
 	assert.AssertTrue(testSig, t)
+	assert.AssertFileExists(localFilePath, t)
+	assert.AssertNotFileExists(localFilePath + ".sha256", t)
 
 	os.Remove(localFilePath)
-	os.Remove(localFilePath + ".sha256")
 
 	// Test for bad.
 	_, err = get.PullAndCheck(localFilePath, "https://fakedomain/fakefile")
@@ -59,7 +60,7 @@ func TestPullAndCheck(t *testing.T) {
 	}
 
 	assert.AssertFalse(testSig, t)
+	assert.AssertNotFileExists(localFilePath + ".sha256", t)
 
 	os.Remove(localFilePath)
-	os.Remove(localFilePath + ".sha256")
 }

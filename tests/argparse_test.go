@@ -11,16 +11,17 @@ func TestParseArgChar(t *testing.T) {
 	argParser := core.ArgParser{}
 
 	// Test for good.
-	argStrs, _ := argParser.ParseArgChar("-vio")
+	argStrs, _ := argParser.ParseArgChar("-Vios")
 
 	assert.AssertString(argStrs[0], "--version", t)
 	assert.AssertString(argStrs[1], "--input-file", t)
 	assert.AssertString(argStrs[2], "--output-file", t)
+	assert.AssertString(argStrs[3], "--skip-validation", t)
 
-	assert.AssertSliceLen(argStrs, 3, t)
+	assert.AssertSliceLen(argStrs, 4, t)
 
 	// Test for bad.
-	argStrs, _ = argParser.ParseArgChar("-iov")
+	argStrs, _ = argParser.ParseArgChar("-ioV")
 
 	assert.AssertNotString(argStrs[0], "--version", t)
 	assert.AssertNotString(argStrs[1], "--input-file", t)
@@ -49,6 +50,10 @@ func TestArgInvoke(t *testing.T) {
 
 	assert.AssertString(settings.RemoteTarget, "http://fakedomain/fakepath", t)
 	assert.AssertString(settings.LocalTarget, "/fakepath", t)
+
+	assert.AssertFalse(settings.SkipValidation, t)
+	argParser.ArgInvoke(1, "--skip-validation", &settings)
+	assert.AssertTrue(settings.SkipValidation, t)
 
 	// Test for bad.
 	err := argParser.ArgInvoke(1, "--fake-arg", &settings)

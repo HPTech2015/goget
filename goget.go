@@ -1,26 +1,34 @@
 package main
 
 import (
-	"fmt"
 	"goget/core"
+	"log"
 )
 
 func main() {
 	// Import Settings
-	settings := core.Settings{Version: "v1.0.0"}
+	settings := core.Settings{Version: "1.0.0"}
 
 	// Parse command line arguments.
 	argParser := core.ArgParser{}
 	err := argParser.ArgParse(&settings)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+
+	if settings.RemoteTarget == "" {
+		return
 	}
 
 	// Get file and checksum from remote web server.
 	getFile := core.GetFile{}
 	validSig, err := getFile.PullAndCheck(settings.LocalTarget, settings.RemoteTarget)
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
+	}
+
+	if settings.SkipValidation {
+		return
 	}
 
 	/*
@@ -28,12 +36,9 @@ func main() {
 		the checksum from the file downloaded.
 	*/
 	if !validSig {
-		fmt.Println("File Signature Validation Failed!")
-		fmt.Println("")
-		fmt.Println("")
-		fmt.Println("Expected Signature:")
-		fmt.Println("    ", getFile.RemoteChecksum)
-		fmt.Println("File Signature:")
-		fmt.Println("    ", getFile.LocalChecksum)
+		log.Fatalf("File Signature Validation Failed!\n\n" + 
+		"Expected Signature:\n    %v\n" +
+		"File Signature:\n    %v", 
+		getFile.RemoteChecksum, getFile.LocalChecksum)
 	}
 }

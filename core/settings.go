@@ -12,6 +12,7 @@ type Settings struct {
 	RemoteTarget string
 	LocalTarget string
 	Version string
+	SkipValidation bool
 }
 
 /*
@@ -90,4 +91,18 @@ func (settings *Settings) GetLocalTarget() (string, error) {
 	}
 
 	return settings.LocalTarget, localError
+}
+
+/*
+	Set bool to skip sha256 validation.
+*/
+func (settings *Settings) SetSkipValidation(skip bool) {
+	settings.SkipValidation = skip
+}
+
+/*
+	Set bool to skip sha256 validation.
+*/
+func (settings *Settings) GetSkipValidation() bool {
+	return settings.SkipValidation
 }

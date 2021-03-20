@@ -68,8 +68,10 @@ func (argParser *ArgParser) ParseArgChar(arg string) ([]string, error) {
 			argStrs = append(argStrs, "--input-file")
 		case "o":
 			argStrs = append(argStrs, "--output-file")
-		case "v":
+		case "V":
 			argStrs = append(argStrs, "--version")
+		case "s":
+			argStrs = append(argStrs, "--skip-validation")
 		default:
 			localError = errors.New("Invalid argument " + string(argChar))
 		}
@@ -92,6 +94,8 @@ func (argParser *ArgParser) ArgInvoke(i int, arg string, settings *Settings) err
 			settings.SetLocalTarget(pwd + "/" + remotePath[len(remotePath) - 1])
 		}
 		settings.SetRemoteTarget(argVal)
+	} else if matched, _ := regexp.MatchString("^--skip-validation", arg); matched {
+		settings.SetSkipValidation(true)
 	} else if matched, _ := regexp.MatchString("^--output-file", arg); matched {
 		argVal, _ := argParser.ExtractArgVal(i, "--output-file", arg)
 		if argVal != "./" {
@@ -100,7 +104,10 @@ func (argParser *ArgParser) ArgInvoke(i int, arg string, settings *Settings) err
 	} else if matched, _ := regexp.MatchString("^--version$", arg); matched {
 		v, err := settings.GetVersion()
 		localError = err
-		fmt.Println(v)
+		fmt.Println("LGPL GoGet", v, "built on GNU Linux.")
+		fmt.Println("")
+		fmt.Println("Original Author: Brendon Dobbs")
+		fmt.Println("")
 	} else {
 		localError = fmt.Errorf("Argument %v does not exist.", arg)
 	}

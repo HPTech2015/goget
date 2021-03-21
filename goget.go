@@ -27,15 +27,11 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if settings.SkipValidation {
-		return
-	}
-
 	/*
 		Compare the checksum from the remote server with
 		the checksum from the file downloaded.
 	*/
-	if !validSig {
+	if !validSig && !settings.SkipValidation {
 		log.Fatalf("File Signature Validation Failed!\n\n" + 
 		"Expected Signature:\n    %v\n" +
 		"File Signature:\n    %v", 

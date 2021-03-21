@@ -110,7 +110,7 @@ func (assert *Assert) AssertFileExists(filePath string, t *testing.T) bool {
 }
 
 /*
-	Test if file is exists.
+	Test if file exists.
 */
 func (assert *Assert) AssertNotFileExists(filePath string, t *testing.T) bool {
 	_, err := os.Stat(filePath)
